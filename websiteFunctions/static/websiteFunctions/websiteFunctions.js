@@ -2756,7 +2756,7 @@ app.controller('listWebsites', function ($scope, $http) {
             $scope.cyberPanelLoading = true;
             if (response.data.listWebSiteStatus === 1) {
 
-                var finalData = JSON.parse(response.data.data);
+                var finalData = response.data.data;
                 $scope.WebSitesList = finalData;
                 $("#listFail").hide();
             } else {
@@ -2962,7 +2962,7 @@ app.controller('listChildDomainsMain', function ($scope, $http, $timeout) {
             $scope.cyberPanelLoading = true;
             if (response.data.listWebSiteStatus === 1) {
 
-                var finalData = JSON.parse(response.data.data);
+                var finalData = response.data.data;
                 $scope.WebSitesList = finalData;
                 $("#listFail").hide();
             } else {

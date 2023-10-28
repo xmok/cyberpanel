@@ -10,6 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CyberCP.settings")
 django.setup()
 from loginSystem.models import Administrator, ACL
 from django.shortcuts import HttpResponse
+from django.http import JsonResponse
 from packages.models import Package
 from websiteFunctions.models import Websites, ChildDomains, aliasDomains
 import json
@@ -323,8 +324,7 @@ class ACLManager:
                         additionalParameter: additionalParameterValue
                         }
 
-            json_data = json.dumps(finalJson)
-            return HttpResponse(json_data)
+            return JsonResponse(finalJson)
         except:
             pass
 

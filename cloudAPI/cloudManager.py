@@ -1,4 +1,5 @@
 import sys
+from django.http import JsonResponse
 import userManagment.views as um
 from backup.backupManager import BackupManager
 from databases.databaseManager import DatabaseManager
@@ -32,8 +33,7 @@ class CloudManager:
 
     def ajaxPre(self, status, errorMessage):
         final_dic = {'status': status, 'error_message': errorMessage}
-        final_json = json.dumps(final_dic)
-        return HttpResponse(final_json)
+        return JsonResponse(final_dic)
 
     def verifyLogin(self, request):
         try:

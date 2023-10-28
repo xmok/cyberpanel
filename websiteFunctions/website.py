@@ -12,6 +12,7 @@ sys.path.append('/usr/local/CyberCP')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CyberCP.settings")
 django.setup()
 import json
+from django.http import JsonResponse
 from plogical.acl import ACLManager
 import plogical.CyberCPLogFileWriter as logging
 from websiteFunctions.models import Websites, ChildDomains, GitLogs, wpplugins, WPSites, WPStaging, WPSitesBackup, \
@@ -2129,13 +2130,11 @@ class WebsiteManager:
 
             if not validators.domain(domain):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if not validators.email(adminEmail) or adminEmail.find('--') > -1:
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid email."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             try:
                 HA = data['HA']
@@ -2182,14 +2181,12 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'createWebSiteStatus': 1, 'error_message': "None",
                         'tempStatusPath': tempStatusPath, 'LinuxUser': externalApp}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitDomainCreation(self, userID=None, data=None):
         try:
@@ -2205,8 +2202,7 @@ class WebsiteManager:
 
             if not validators.domain(domain):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if data['domainName'].find("cyberpanel.website") > -1:
                 url = "https://platform.cyberpersons.com/CyberpanelAdOns/CreateDomain"
@@ -2223,8 +2219,7 @@ class WebsiteManager:
 
                 if domain_status == 0:
                     data_ret = {'status': 0, 'installStatus': 0, 'error_message': response.json()['error_message']}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
 
             if ACLManager.checkOwnership(masterDomain, admin, currentACL) == 1:
                 pass
@@ -2261,13 +2256,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'createWebSiteStatus': 1, 'error_message': "None",
                         'tempStatusPath': tempStatusPath}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchDomains(self, userID=None, data=None):
         try:
@@ -2284,13 +2277,12 @@ class WebsiteManager:
             cdManager = ChildDomainManager(masterDomain)
             json_data = cdManager.findChildDomainsJson()
 
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def searchWebsites(self, userID=None, data=None):
         try:
@@ -2305,12 +2297,10 @@ class WebsiteManager:
             pagination = self.websitePagination(currentACL, userID)
             final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json_data,
                          'pagination': pagination}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             dic = {'status': 1, 'listWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def searchChilds(self, userID=None, data=None):
         try:
@@ -2326,12 +2316,10 @@ class WebsiteManager:
             json_data = self.findChildsListJson(childDomains)
 
             final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json_data}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             dic = {'status': 1, 'listWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def getFurtherAccounts(self, userID=None, data=None):
         try:
@@ -2339,14 +2327,12 @@ class WebsiteManager:
             pageNumber = int(data['page'])
             json_data = self.findWebsitesJson(currentACL, userID, pageNumber)
             pagination = self.websitePagination(currentACL, userID)
-            final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json_data,
+            final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json.loads(json_data),
                          'pagination': pagination}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             dic = {'status': 1, 'listWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def fetchWebsitesList(self, userID=None, data=None):
         try:
@@ -2361,12 +2347,10 @@ class WebsiteManager:
 
             final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json_data,
                          'pagination': pagination}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             dic = {'status': 1, 'listWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def fetchChildDomainsMain(self, userID=None, data=None):
         try:
@@ -2390,12 +2374,10 @@ class WebsiteManager:
 
             final_dic = {'status': 1, 'listWebSiteStatus': 1, 'error_message': "None", "data": json_data,
                          'pagination': pagination}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             dic = {'status': 1, 'listWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def findWebsitesListJson(self, websites):
 
@@ -2532,13 +2514,11 @@ class WebsiteManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             data_ret = {'status': 1, 'websiteDeleteStatus': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'websiteDeleteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitDomainDeletion(self, userID=None, data=None):
         try:
@@ -2575,13 +2555,11 @@ class WebsiteManager:
             ProcessUtilities.outputExecutioner(execPath)
 
             data_ret = {'status': 1, 'websiteDeleteStatus': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'websiteDeleteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitWebsiteStatus(self, userID=None, data=None):
         try:
@@ -2640,14 +2618,12 @@ class WebsiteManager:
             website.save()
 
             data_ret = {'websiteStatus': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
 
             data_ret = {'websiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitWebsiteModify(self, userID=None, data=None):
         try:
@@ -2708,13 +2684,11 @@ class WebsiteManager:
             data_ret = {'status': 1, 'modifyStatus': 1, 'error_message': "None", "adminEmail": email,
                         "packages": json_data, "current_pack": currentPack, "adminNames": admin_data,
                         'currentAdmin': owner}
-            final_json = json.dumps(data_ret)
-            return HttpResponse(final_json)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             dic = {'status': 0, 'modifyStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(json_data)
 
     def fetchWebsiteDataJSON(self, userID=None, data=None):
         try:
@@ -2760,13 +2734,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'error_message': "None",
                         "packages": json_data, "adminNames": admin_data}
-            final_json = json.dumps(data_ret)
-            return HttpResponse(final_json)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             dic = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def saveWebsiteChanges(self, userID=None, data=None):
         try:
@@ -2825,13 +2797,11 @@ class WebsiteManager:
             ##
 
             data_ret = {'status': 1, 'saveStatus': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'saveStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def loadDomainHome(self, request=None, userID=None, data=None):
 
@@ -4435,7 +4405,7 @@ StrictHostKeyChecking no
 
         json_data = json_data + ']'
 
-        return json_data
+        return json.loads(json_data)
 
     def findWebsitesJson(self, currentACL, userID, pageNumber):
         finalPageNumber = ((pageNumber * 10)) - 10
