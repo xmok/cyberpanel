@@ -161,8 +161,7 @@ class CloudManager:
             ##
 
             Data['status'] = 1
-            final_json = json.dumps(Data)
-            return HttpResponse(final_json)
+            return JsonResponse(Data)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -351,12 +350,10 @@ class CloudManager:
                     command = 'rm -f ' + statusFile
                     ProcessUtilities.executioner(command)
                     data_ret = {'status': 1, 'abort': 1, 'installationProgress': "100", 'currentStatus': lastLine}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
                 elif lastLine.find('[404]') > -1:
                     data_ret = {'status': 0, 'abort': 1, 'installationProgress': "0", 'error_message': lastLine}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
                 else:
                     progress = lastLine.split(',')
                     currentStatus = progress[0]
@@ -366,18 +363,15 @@ class CloudManager:
                         installationProgress = 0
                     data_ret = {'status': 1, 'abort': 0, 'installationProgress': installationProgress,
                                 'currentStatus': currentStatus}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
             except IndexError:
                 data_ret = {'status': 1, 'abort': 0, 'installationProgress': 0,
                             'currentStatus': 'Working..'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitDomainCreation(self):
         try:
@@ -421,8 +415,7 @@ class CloudManager:
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitBackupCreation(self):
         try:
@@ -472,8 +465,8 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -511,8 +504,8 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -551,8 +544,8 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -600,8 +593,8 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -665,8 +658,8 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -719,8 +712,7 @@ class CloudManager:
         try:
             request.session['userID'] = self.admin.pk
             data_ret = {'status': 1, 'serverStatus': ProcessUtilities.decideServer()}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -837,8 +829,7 @@ class CloudManager:
                 'error_message': "None",
                 'pubKey': data
             }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1063,8 +1054,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.showStatus()
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1094,8 +1084,7 @@ class CloudManager:
 
             finalData['status'] = 1
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1127,8 +1116,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.restartMySQL()
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1142,8 +1130,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.fetchDatabases()
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1157,8 +1144,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.fetchTables(self.data)
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1172,8 +1158,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.deleteTable(self.data)
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1187,8 +1172,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.fetchTableData(self.data)
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1202,8 +1186,7 @@ class CloudManager:
 
             finalData = mysqlUtilities.fetchStructure(self.data)
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1398,8 +1381,7 @@ class CloudManager:
             else:
                 finalData['notInstalled'] = 0
 
-            finalData = json.dumps(finalData)
-            return HttpResponse(finalData)
+            return JsonResponse(finalData)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1417,8 +1399,7 @@ class CloudManager:
             c.start()
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1463,8 +1444,7 @@ class CloudManager:
             background.start()
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath, 'reportFile': reportFile}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1475,13 +1455,11 @@ class CloudManager:
             reportContent = open(reportFile, 'r').read()
 
             data_ret = {'status': 1, 'reportContent': reportContent}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ResetEmailConfigurations(self):
         try:
@@ -1498,8 +1476,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1510,8 +1487,7 @@ class CloudManager:
             websites = ACLManager.findAllWebsites(currentACL, self.admin.pk)
 
             final_dic = {'status': 1, 'websites': websites}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1524,12 +1500,10 @@ class CloudManager:
 
             if result[0]:
                 final_dic = {'error_message': result[1], 'status': 1}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
             else:
                 final_dic = {'error_message': result[1], 'status': 0}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
 
@@ -1553,13 +1527,11 @@ class CloudManager:
                 FTP = 0
 
             data_ret = {'status': 1, 'FTP': FTP}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ResetFTPConfigurations(self):
         try:
@@ -1576,8 +1548,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1592,13 +1563,11 @@ class CloudManager:
                 DNS = 0
 
             data_ret = {'status': 1, 'DNS': DNS}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ResetDNSConfigurations(self):
         try:
@@ -1615,8 +1584,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1672,8 +1640,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath, 'path': '%s.tar.gz' % (BackupPath)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1710,12 +1677,11 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def fetchCloudBackupSettings(self):
         try:
@@ -1731,13 +1697,11 @@ class CloudManager:
                 self.time = backupUtilities.time
 
             data_ret = {'status': 1, 'nice': self.nice, 'cpu': self.cpu, 'time': self.time}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def saveCloudBackupSettings(self):
         try:
@@ -1747,13 +1711,11 @@ class CloudManager:
             writeToFile.close()
 
             data_ret = {'status': 1}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'abort': 0, 'installationProgress': "0", 'errorMessage': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def deleteCloudBackup(self):
         try:
@@ -1765,12 +1727,11 @@ class CloudManager:
             command = 'rm -f %s' % (backupsPathComplete)
             ProcessUtilities.executioner(command)
 
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None"})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None"}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SubmitCloudBackupRestore(self):
         try:
@@ -1792,8 +1753,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1859,12 +1819,11 @@ class CloudManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json.loads(json_data)}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def deleteS3Backup(self):
         try:
@@ -1891,12 +1850,11 @@ class CloudManager:
 
             s3.Object(plan.bucket, self.data['backupFile']).delete()
 
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None"})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None"}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SubmitS3BackupRestore(self):
         try:
@@ -1913,8 +1871,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -1946,8 +1903,7 @@ class CloudManager:
             ProcessUtilities.popenExecutioner(execPath)
 
             final_dic = {'status': 1, 'tempStatusPath': tempStatusPath}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -2036,8 +1992,7 @@ class CloudManager:
 
             ##
 
-            final_json = json.dumps(finalDic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -2070,9 +2025,8 @@ class CloudManager:
             command = 'wp user update cyberpanel --user_pass="%s" --path=%s --skip-plugins --skip-themes' % (password, path)
             ProcessUtilities.executioner(command, website.externalApp)
 
-            finalDic = {'status': 1, 'password': password}
-            final_json = json.dumps(finalDic)
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'password': password}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -2102,15 +2056,13 @@ class CloudManager:
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'LSCache successfully installed and activated.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
                 else:
                     command = 'wp plugin deactivate litespeed-cache --path=%s --skip-plugins --skip-themes' % (path)
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'LSCache successfully deactivated.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
             elif self.data['setting'] == 'debugging':
 
                 command = "wp litespeed-purge all --path=%s --skip-plugins --skip-themes" % (path)
@@ -2121,16 +2073,14 @@ class CloudManager:
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'WordPress is now in debug mode.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
 
                 else:
                     command = "wp config set WP_DEBUG false --path=%s --skip-plugins --skip-themes" % (path)
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'WordPress debug mode turned off.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
             elif self.data['setting'] == 'searchIndex':
 
                 command = "wp litespeed-purge all --path=%s --skip-plugins --skip-themes" % (path)
@@ -2141,16 +2091,14 @@ class CloudManager:
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'Search Engine Indexing enabled.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
 
                 else:
                     command = "wp option update blog_public 0 --path=%s --skip-plugins --skip-themes" % (path)
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'Search Engine Indexing disabled.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
             elif self.data['setting'] == 'maintenanceMode':
 
                 command = "wp litespeed-purge all --path=%s --skip-plugins --skip-themes" % (path)
@@ -2162,16 +2110,14 @@ class CloudManager:
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'WordPress Maintenance mode turned on.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
 
                 else:
                     command = "wp maintenance-mode deactivate --path=%s --skip-plugins --skip-themes" % (path)
                     ProcessUtilities.executioner(command, website.externalApp)
 
                     final_dic = {'status': 1, 'message': 'WordPress Maintenance mode turned off.'}
-                    final_json = json.dumps(final_dic)
-                    return HttpResponse(final_json)
+                    return JsonResponse(final_dic)
 
         except BaseException as msg:
             return self.ajaxPre(0, str(msg))
@@ -2191,13 +2137,12 @@ class CloudManager:
 
             command = 'wp plugin list --skip-plugins --skip-themes --format=json --path=%s' % (path)
             json_data = ProcessUtilities.outputExecutioner(command, website.externalApp).splitlines()[-1]
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json.loads(json_data)}
 
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def UpdatePlugins(self):
         try:
@@ -2215,16 +2160,14 @@ class CloudManager:
             if self.data['plugin'] == 'all':
                 command = 'wp plugin update --all --skip-plugins --skip-themes --path=%s' % (path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."}
+                return JsonResponse(final_dic)
             elif self.data['plugin'] == 'selected':
                 if self.data['allPluginsChecked']:
                     command = 'wp plugin update --all --skip-plugins --skip-themes --path=%s' % (path)
                     ProcessUtilities.popenExecutioner(command, website.externalApp)
-                    final_json = json.dumps(
-                        {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."})
-                    return HttpResponse(final_json)
+                    final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."}
+                    return JsonResponse(final_dic)
                 else:
                     pluginsList = ''
 
@@ -2233,20 +2176,17 @@ class CloudManager:
 
                     command = 'wp plugin update %s --skip-plugins --skip-themes --path=%s' % (pluginsList, path)
                     ProcessUtilities.popenExecutioner(command, website.externalApp)
-                    final_json = json.dumps(
-                        {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."})
-                    return HttpResponse(final_json)
+                    final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."}
+                    return JsonResponse(final_dic)
             else:
                 command = 'wp plugin update %s --skip-plugins --skip-themes --path=%s' % (self.data['plugin'], path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin updates started in the background."}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def ChangeState(self):
         try:
@@ -2267,21 +2207,18 @@ class CloudManager:
             if result.find('Status: Active') > -1:
                 command = 'wp plugin deactivate %s --skip-plugins --skip-themes --path=%s' % (self.data['plugin'], path)
                 ProcessUtilities.executioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin successfully deactivated."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin successfully deactivated."}
+                return JsonResponse(final_dic)
             else:
                 command = 'wp plugin activate %s --skip-plugins --skip-themes --path=%s' % (
                     self.data['plugin'], path)
                 ProcessUtilities.executioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin successfully activated."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin successfully activated."}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def DeletePlugins(self):
         try:
@@ -2304,20 +2241,17 @@ class CloudManager:
 
                 command = 'wp plugin delete %s --skip-plugins --skip-themes --path=%s' % (pluginsList, path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin deletion started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin deletion started in the background."}
+                return JsonResponse(final_dic)
             else:
                 command = 'wp plugin delete %s --skip-plugins --skip-themes --path=%s' % (self.data['plugin'], path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin deletion started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin deletion started in the background."}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def GetCurrentThemes(self):
         try:
@@ -2335,12 +2269,11 @@ class CloudManager:
 
             command = 'wp theme list --skip-plugins --skip-themes --format=json --path=%s' % (path)
             json_data = ProcessUtilities.outputExecutioner(command, website.externalApp).splitlines()[-1]
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def UpdateThemes(self):
         try:
@@ -2358,16 +2291,14 @@ class CloudManager:
             if self.data['plugin'] == 'all':
                 command = 'wp theme update --all --skip-plugins --skip-themes --path=%s' % (path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."}
+                return JsonResponse(final_dic)
             elif self.data['plugin'] == 'selected':
                 if self.data['allPluginsChecked']:
                     command = 'wp theme update --all --skip-plugins --skip-themes --path=%s' % (path)
                     ProcessUtilities.popenExecutioner(command, website.externalApp)
-                    final_json = json.dumps(
-                        {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."})
-                    return HttpResponse(final_json)
+                    final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."}
+                    return JsonResponse(final_dic)
                 else:
                     pluginsList = ''
 
@@ -2376,20 +2307,17 @@ class CloudManager:
 
                     command = 'wp theme update %s --skip-plugins --skip-themes --path=%s' % (pluginsList, path)
                     ProcessUtilities.popenExecutioner(command, website.externalApp)
-                    final_json = json.dumps(
-                        {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."})
-                    return HttpResponse(final_json)
+                    final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."}
+                    return JsonResponse(final_dic)
             else:
                 command = 'wp theme update %s --skip-plugins --skip-themes --path=%s' % (self.data['plugin'], path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme updates started in the background."}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def ChangeStateThemes(self):
         try:
@@ -2411,22 +2339,19 @@ class CloudManager:
                 command = 'wp theme deactivate %s --skip-plugins --skip-themes --path=%s' % (
                     self.data['plugin'], path)
                 ProcessUtilities.executioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Theme successfully deactivated."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme successfully deactivated."}
+                return JsonResponse(final_dic)
             else:
                 command = 'wp theme activate %s --skip-plugins --skip-themes --path=%s' % (
                     self.data['plugin'], path)
                 ProcessUtilities.executioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Theme successfully activated."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme successfully activated."}
+                return JsonResponse(final_dic)
 
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def DeleteThemes(self):
         try:
@@ -2449,20 +2374,17 @@ class CloudManager:
 
                 command = 'wp theme delete %s --skip-plugins --skip-themes --path=%s' % (pluginsList, path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Plugin Theme started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Plugin Theme started in the background."}
+                return JsonResponse(final_dic)
             else:
                 command = 'wp theme delete %s --skip-plugins --skip-themes --path=%s' % (self.data['plugin'], path)
                 ProcessUtilities.popenExecutioner(command, website.externalApp)
-                final_json = json.dumps(
-                    {'status': 1, 'fetchStatus': 1, 'message': "Theme deletion started in the background."})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1, 'fetchStatus': 1, 'message': "Theme deletion started in the background."}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def GetServerPublicSSHkey(self):
         try:
@@ -2472,13 +2394,11 @@ class CloudManager:
             key = ProcessUtilities.outputExecutioner(command)
 
             final_dic = {'status': 1, 'key': key}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SubmitPublicKey(self):
         try:
@@ -2501,13 +2421,11 @@ class CloudManager:
             SSHServer.findSSHPort()
 
             final_dic = {'status': 1, 'port': SSHServer.DEFAULT_PORT}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def CreateStaging(self, request):
         try:
@@ -2563,13 +2481,11 @@ class CloudManager:
                 command = "wp config set WP_AUTO_UPDATE_CORE true --raw --allow-root --path=%s" % (path)
                 ProcessUtilities.executioner(command, website.externalApp)
 
-            final_json = json.dumps(
-                {'status': 1, 'message': "Autoupdates configured."})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'message': "Autoupdates configured."}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def fetchWPSettings(self):
         try:
@@ -2594,39 +2510,35 @@ class CloudManager:
             if finalCron.find('WPAutoUpdates.py') == -1:
                 finalCron = 'Not Set'
 
-            final_json = json.dumps(
-                {'status': 1, 'cliVersion': cliVersion, 'finalCron': finalCron})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'cliVersion': cliVersion, 'finalCron': finalCron}
+            return JsonResponse(final_dic)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def updateWPCLI(self):
         try:
 
             command = 'wp cli update'
             ProcessUtilities.executioner(command)
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def saveWPSettings(self):
         try:
 
             command = 'wp cli update'
             ProcessUtilities.executioner(command)
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def WPScan(self):
         try:
@@ -2639,16 +2551,14 @@ class CloudManager:
             if result.find('Error:') > -1:
                 final_dic = {'status': 0, 'fetchStatus': 0,
                              'error_message': 'This does not seem to be a WordPress installation'}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
             else:
-                final_json = json.dumps({'status': 1})
-                return HttpResponse(final_json)
+                final_dic = {'status': 1}
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SubmitCyberPanelUpgrade(self):
         try:
@@ -2671,13 +2581,12 @@ class CloudManager:
             self.data['CyberPanelBranch'], mail, dns, ftp)
 
             ProcessUtilities.executioner(execPath)
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def DetachCluster(self):
         try:
@@ -2687,13 +2596,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function %s --type %s" % ('DetachCluster', type)
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SetupCluster(self):
         try:
@@ -2706,13 +2614,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function SetupCluster --type %s" % (self.data['type'])
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def FetchMasterBootStrapStatus(self):
         try:
@@ -2744,13 +2651,12 @@ class CloudManager:
             else:
                 data['safe'] = 0
 
-            final_json = json.dumps(data)
-            return HttpResponse(final_json)
+            final_dic = data
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def FetchChildBootStrapStatus(self):
         try:
@@ -2768,13 +2674,12 @@ class CloudManager:
             else:
                 data['safe'] = 0
 
-            final_json = json.dumps(data)
-            return HttpResponse(final_json)
+            final_dic = data
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def BootMaster(self):
         try:
@@ -2782,13 +2687,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function BootMaster --type Master"
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def BootChild(self):
         try:
@@ -2801,13 +2705,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function BootChild --type Child"
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def CreatePendingVirtualHosts(self):
         try:
@@ -2815,13 +2718,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function CreatePendingVirtualHosts --type Child"
             ProcessUtilities.popenExecutioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SwitchDNS(self):
         try:
@@ -2945,14 +2847,13 @@ class CloudManager:
                         except:
                             pass
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             logging.writeToFile(str(msg))
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def DebugCluster(self):
         try:
@@ -2962,13 +2863,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function %s --type %s" % ('DebugCluster', type)
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def UptimeMonitor(self):
         try:
@@ -2987,13 +2887,12 @@ class CloudManager:
             execPath = "/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function UptimeMonitor --type All"
             ProcessUtilities.executioner(execPath)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def CheckMasterNode(self):
         try:
@@ -3002,16 +2901,15 @@ class CloudManager:
             result = ProcessUtilities.outputExecutioner(command)
 
             if result.find('active (running)') > -1:
-                final_json = json.dumps({'status': 1})
+                final_dic = {'status': 1}
             else:
-                final_json = json.dumps({'status': 0, 'error_message': 'MySQL on Main node is not running.'})
+                final_dic = {'status': 0, 'error_message': 'MySQL on Main node is not running.'}
 
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def SyncToMaster(self):
         try:
@@ -3019,10 +2917,9 @@ class CloudManager:
             command = '/usr/local/CyberCP/bin/python /usr/local/CyberCP/plogical/ClusterManager.py --function SyncToMaster --type Failover'
             ProcessUtilities.executioner(command)
 
-            final_json = json.dumps({'status': 1})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)

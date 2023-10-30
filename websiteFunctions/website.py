@@ -21,7 +21,7 @@ from plogical.virtualHostUtilities import virtualHostUtilities
 import subprocess
 import shlex
 from plogical.installUtilities import installUtilities
-from django.shortcuts import HttpResponse, render, redirect
+from django.shortcuts import render, redirect
 from loginSystem.models import Administrator, ACL
 from packages.models import Package
 from plogical.mailUtilities import mailUtilities
@@ -545,17 +545,14 @@ class WebsiteManager:
 
                 data_ret = {'status': 1, 'plugns': r, }
 
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': 'Premium feature not available.'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def AddNewpluginAjax(self, userID=None, data=None):
         try:
@@ -574,13 +571,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1}
 
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'AddNewpluginAjax': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def EidtPlugin(self, request=None, userID=None, pluginbID=None):
         Data = {}
@@ -627,12 +622,10 @@ class WebsiteManager:
 
             data_ret = {'status': 1}
 
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0, 'deletesPlgin': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def Addplugineidt(self, userID=None, data=None, ):
         try:
@@ -658,8 +651,7 @@ class WebsiteManager:
                 print('index.....%s' % index)
                 if (index >= 0):
                     data_ret = {'status': 0, 'deletesPlgin': 0, 'error_message': str('Already Save in your Plugin lis')}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
 
             except:
                 ab = []
@@ -670,12 +662,10 @@ class WebsiteManager:
 
             data_ret = {'status': 1}
 
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0, 'deletesPlgin': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def modifyWebsite(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -869,14 +859,12 @@ class WebsiteManager:
             }
 
             data_ret = {'status': 1, 'error_message': 'None', 'ret_data': fb}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def GetCurrentPlugins(self, userID=None, data=None):
         try:
@@ -907,14 +895,12 @@ class WebsiteManager:
             json_data = stdoutput.splitlines()[-1]
 
             data_ret = {'status': 1, 'error_message': 'None', 'plugins': json_data}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def GetCurrentThemes(self, userID=None, data=None):
         try:
@@ -945,14 +931,12 @@ class WebsiteManager:
             json_data = stdoutput.splitlines()[-1]
 
             data_ret = {'status': 1, 'error_message': 'None', 'themes': json_data}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchstaging(self, userID=None, data=None):
         try:
@@ -973,14 +957,12 @@ class WebsiteManager:
             json_data = phpUtilities.GetStagingInJson(wpsite.wpstaging_set.all().order_by('-id'))
 
             data_ret = {'status': 1, 'error_message': 'None', 'wpsites': json_data}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchDatabase(self, userID=None, data=None):
         try:
@@ -1007,8 +989,7 @@ class WebsiteManager:
                 DataBaseName = html.escape(DataBaseName)
             else:
                 data_ret = {'status': 0, 'error_message': stdoutput}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             command = f'{FinalPHPPath} -d error_reporting=0 /usr/bin/wp config get DB_USER  --skip-plugins --skip-themes --path={wpsite.path} 2>/dev/null'
             retStatus, stdoutput = ProcessUtilities.outputExecutioner(command, wpsite.owner.externalApp, True, None, 1)
@@ -1018,8 +999,7 @@ class WebsiteManager:
                 DataBaseUser = html.escape(DataBaseUser)
             else:
                 data_ret = {'status': 0, 'error_message': stdoutput}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             command = f'{FinalPHPPath} -d error_reporting=0 /usr/bin/wp config get table_prefix  --skip-plugins --skip-themes --path={wpsite.path} 2>/dev/null'
             retStatus, stdoutput = ProcessUtilities.outputExecutioner(command, wpsite.owner.externalApp, True, None, 1)
@@ -1029,18 +1009,15 @@ class WebsiteManager:
                 tableprefix = html.escape(tableprefix)
             else:
                 data_ret = {'status': 0, 'error_message': stdoutput}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             data_ret = {'status': 1, 'error_message': 'None', "DataBaseUser": DataBaseUser,
                         "DataBaseName": DataBaseName, 'tableprefix': tableprefix}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def SaveUpdateConfig(self, userID=None, data=None):
         try:
@@ -1066,14 +1043,12 @@ class WebsiteManager:
             wpsite.save()
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def DeploytoProduction(self, userID=None, data=None):
         try:
@@ -1113,12 +1088,10 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def WPCreateBackup(self, userID=None, data=None):
         try:
@@ -1149,13 +1122,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def RestoreWPbackupNow(self, userID=None, data=None):
         try:
@@ -1202,13 +1173,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def SaveBackupConfig(self, userID=None, data=None):
         try:
@@ -1260,13 +1229,11 @@ class WebsiteManager:
             time.sleep(1)
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def SaveBackupSchedule(self, userID=None, data=None):
         try:
@@ -1313,8 +1280,7 @@ class WebsiteManager:
                 except BaseException as msg:
                     logging.CyberCPLogFileWriter.writeToFile("Creating Bucket Error: %s" % str(msg))
                     data_ret = {'status': 0, 'error_message': str(msg)}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
 
                 config = {
                     'BackupType': BackupType,
@@ -1331,13 +1297,11 @@ class WebsiteManager:
             svobj.save()
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def AddWPsiteforRemoteBackup(self, userID=None, data=None):
         try:
@@ -1376,13 +1340,11 @@ class WebsiteManager:
             svobj.save()
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def UpdateRemoteschedules(self, userID=None, data=None):
         try:
@@ -1399,13 +1361,11 @@ class WebsiteManager:
             scheduleobj.save()
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ScanWordpressSite(self, userID=None, data=None):
         try:
@@ -1457,13 +1417,11 @@ class WebsiteManager:
                         wpobj.save()
 
             data_ret = {'status': 1, 'error_message': 'None', }
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def installwpcore(self, userID=None, data=None):
         try:
@@ -1501,13 +1459,11 @@ class WebsiteManager:
             output = ProcessUtilities.outputExecutioner(command)
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None', 'result': output}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def dataintegrity(self, userID=None, data=None):
         try:
@@ -1540,13 +1496,11 @@ class WebsiteManager:
             result = ProcessUtilities.outputExecutioner(command)
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None', 'result': result}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def UpdatePlugins(self, userID=None, data=None):
         try:
@@ -1587,14 +1541,12 @@ class WebsiteManager:
             time.sleep(2)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def UpdateThemes(self, userID=None, data=None):
         try:
@@ -1635,14 +1587,12 @@ class WebsiteManager:
             time.sleep(2)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def DeletePlugins(self, userID=None, data=None):
         try:
@@ -1683,14 +1633,12 @@ class WebsiteManager:
             time.sleep(2)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def DeleteThemes(self, userID=None, data=None):
         try:
@@ -1728,14 +1676,12 @@ class WebsiteManager:
             background.start()
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ChangeStatus(self, userID=None, data=None):
         try:
@@ -1779,14 +1725,12 @@ class WebsiteManager:
                 time.sleep(3)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def ChangeStatusThemes(self, userID=None, data=None):
         try:
@@ -1823,14 +1767,12 @@ class WebsiteManager:
             background.start()
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def CreateStagingNow(self, userID=None, data=None):
         try:
@@ -1858,14 +1800,12 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def UpdateWPSettings(self, userID=None, data=None):
         try:
@@ -2025,14 +1965,12 @@ class WebsiteManager:
                     logging.CyberCPLogFileWriter.writeToFile("Debugging output:" + str(stdout))
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitWorpressCreation(self, userID=None, data=None):
         try:
@@ -2077,14 +2015,12 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def submitWebsiteCreation(self, userID=None, data=None):
         try:
@@ -2111,8 +2047,7 @@ class WebsiteManager:
 
                 if domain_status == 0:
                     data_ret = {'status': 0, 'installStatus': 0, 'error_message': response.json()['error_message']}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
 
             loggedUser = Administrator.objects.get(pk=userID)
             newOwner = Administrator.objects.get(userName=websiteOwner)
@@ -2125,8 +2060,7 @@ class WebsiteManager:
 
             if ACLManager.CheckDomainBlackList(domain) == 0:
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Blacklisted domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if not validators.domain(domain):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
@@ -2998,10 +2932,8 @@ class WebsiteManager:
         result = ProcessUtilities.outputExecutioner(command)
 
         if result.find('->') > -1:
-            final_json = json.dumps(
-                {'status': 0, 'logstatus': 0,
-                 'error_message': "Symlink attack."})
-            return HttpResponse(final_json)
+            final_dic = {'status': 0, 'logstatus': 0, 'error_message': "Symlink attack."}
+            return JsonResponse(final_dic)
 
         ## get Logs
         website = Websites.objects.get(domain=self.domain)
@@ -3009,10 +2941,8 @@ class WebsiteManager:
         output = virtualHostUtilities.getAccessLogs(fileName, page, website.externalApp)
 
         if output.find("1,None") > -1:
-            final_json = json.dumps(
-                {'status': 0, 'logstatus': 0,
-                 'error_message': "Not able to fetch logs, see CyberPanel main log file, Error: %s" % (output)})
-            return HttpResponse(final_json)
+            final_dic = {'status': 0, 'logstatus': 0, 'error_message': "Not able to fetch logs, see CyberPanel main log file, Error: %s" % (output)}
+            return JsonResponse(final_dic)
 
         ## get log ends here.
 
@@ -3044,8 +2974,8 @@ class WebsiteManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
         json_data = json_data + ']'
-        final_json = json.dumps({'status': 1, 'logstatus': 1, 'error_message': "None", "data": json_data})
-        return HttpResponse(final_json)
+        final_dic = {'status': 1, 'logstatus': 1, 'error_message': "None", "data": json_data}
+        return JsonResponse(final_dic)
 
     def fetchErrorLogs(self, userID=None, data=None):
 
@@ -3066,10 +2996,8 @@ class WebsiteManager:
         result = ProcessUtilities.outputExecutioner(command)
 
         if result.find('->') > -1:
-            final_json = json.dumps(
-                {'status': 0, 'logstatus': 0,
-                 'error_message': "Symlink attack."})
-            return HttpResponse(final_json)
+            final_dic =  {'status': 0, 'logstatus': 0, 'error_message': "Symlink attack."}
+            return JsonResponse(final_dic)
 
         ## get Logs
         website = Websites.objects.get(domain=self.domain)
@@ -3077,14 +3005,13 @@ class WebsiteManager:
         output = virtualHostUtilities.getErrorLogs(fileName, page, website.externalApp)
 
         if output.find("1,None") > -1:
-            final_json = json.dumps(
-                {'status': 0, 'logstatus': 0, 'error_message': "Not able to fetch logs, see CyberPanel main log file!"})
-            return HttpResponse(final_json)
+            final_dic = {'status': 0, 'logstatus': 0, 'error_message': "Not able to fetch logs, see CyberPanel main log file!"}
+            return JsonResponse(final_dic)
 
         ## get log ends here.
 
-        final_json = json.dumps({'status': 1, 'logstatus': 1, 'error_message': "None", "data": output})
-        return HttpResponse(final_json)
+        final_dic = {'status': 1, 'logstatus': 1, 'error_message': "None", "data": output}
+        return JsonResponse(final_dic)
 
     def getDataFromConfigFile(self, userID=None, data=None):
 
@@ -3108,8 +3035,7 @@ class WebsiteManager:
             if len(configData) == 0:
                 status = {'status': 0, "configstatus": 0, "error_message": "Configuration file is currently empty!"}
 
-                final_json = json.dumps(status)
-                return HttpResponse(final_json)
+                return JsonResponse(status)
 
         else:
             command = 'redis-cli get "vhost:%s"' % (self.domain)
@@ -3118,8 +3044,7 @@ class WebsiteManager:
                 configData)
 
         status = {'status': 1, "configstatus": 1, "configData": configData}
-        final_json = json.dumps(status)
-        return HttpResponse(final_json)
+        return JsonResponse(status)
 
     def saveConfigsToFile(self, userID=None, data=None):
 
@@ -3159,12 +3084,10 @@ class WebsiteManager:
             if output.find("1,None") > -1:
                 status = {"configstatus": 1}
 
-                final_json = json.dumps(status)
-                return HttpResponse(final_json)
+                return JsonResponse(status)
             else:
                 data_ret = {'configstatus': 0, 'error_message': output}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
                 ## save configuration data ends
         else:
@@ -3174,8 +3097,7 @@ class WebsiteManager:
 
             status = {"configstatus": 1}
 
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
 
     def getRewriteRules(self, userID=None, data=None):
 
@@ -3203,18 +3125,15 @@ class WebsiteManager:
 
             if len(rewriteRules) == 0:
                 status = {"rewriteStatus": 1, "error_message": "Rules file is currently empty"}
-                final_json = json.dumps(status)
-                return HttpResponse(final_json)
+                return JsonResponse(status)
 
             status = {"rewriteStatus": 1, "rewriteRules": rewriteRules}
 
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
 
         except BaseException as msg:
             status = {"rewriteStatus": 1, "error_message": str(msg), "rewriteRules": ""}
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
 
     def saveRewriteRules(self, userID=None, data=None):
         try:
@@ -3258,12 +3177,10 @@ class WebsiteManager:
 
             installUtilities.reStartLiteSpeedSocket()
             status = {"rewriteStatus": 1, 'error_message': 'None'}
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
         except BaseException as msg:
             status = {"rewriteStatus": 0, 'error_message': str(msg)}
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
 
     def saveSSL(self, userID=None, data=None):
 
@@ -3300,14 +3217,12 @@ class WebsiteManager:
 
         if output.find("1,None") > -1:
             data_ret = {'sslStatus': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         else:
             logging.CyberCPLogFileWriter.writeToFile(
                 output)
             data_ret = {'sslStatus': 0, 'error_message': output}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def changePHP(self, userID=None, data=None):
 
@@ -3338,8 +3253,7 @@ class WebsiteManager:
             website.save()
 
         data_ret = {'status': 1, 'changePHP': 1, 'error_message': "None"}
-        json_data = json.dumps(data_ret)
-        return HttpResponse(json_data)
+        return JsonResponse(data_ret)
 
     def getWebsiteCron(self, userID=None, data=None):
         try:
@@ -3359,8 +3273,7 @@ class WebsiteManager:
                 pass
             else:
                 dic = {'getWebsiteCron': 0, 'error_message': 'You do not own this domain'}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
             CronUtil.CronPrem(1)
 
@@ -3389,8 +3302,7 @@ class WebsiteManager:
 
             if f.find("0,CyberPanel,") > -1:
                 data_ret = {'getWebsiteCron': 0, "user": website.externalApp, "crons": {}}
-                final_json = json.dumps(data_ret)
-                return HttpResponse(final_json)
+                return JsonResponse(data_ret)
 
             counter = 0
             for line in f.split("\n"):
@@ -3407,13 +3319,11 @@ class WebsiteManager:
                                       "command": split[5]})
 
             data_ret = {'getWebsiteCron': 1, "user": website.externalApp, "crons": crons}
-            final_json = json.dumps(data_ret)
-            return HttpResponse(final_json)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             logging.CyberCPLogFileWriter.writeToFile(str(msg))
             dic = {'getWebsiteCron': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def getCronbyLine(self, userID=None, data=None):
         try:
@@ -3433,8 +3343,7 @@ class WebsiteManager:
                 pass
             else:
                 dic = {'getWebsiteCron': 0, 'error_message': 'You do not own this domain'}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
             line -= 1
             website = Websites.objects.get(domain=self.domain)
@@ -3448,8 +3357,7 @@ class WebsiteManager:
                 CronUtil.CronPrem(0)
             except subprocess.CalledProcessError as error:
                 dic = {'getWebsiteCron': 0, 'error_message': 'Unable to access Cron file'}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
             f = f.split("\n")
             cron = f[line]
@@ -3457,8 +3365,7 @@ class WebsiteManager:
             cron = cron.split(" ", 5)
             if len(cron) != 6:
                 dic = {'getWebsiteCron': 0, 'error_message': 'Cron line incorrect'}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
             data_ret = {"getWebsiteCron": 1,
                         "user": website.externalApp,
@@ -3471,13 +3378,11 @@ class WebsiteManager:
                             "command": cron[5],
                         },
                         "line": line}
-            final_json = json.dumps(data_ret)
-            return HttpResponse(final_json)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             print(msg)
             dic = {'getWebsiteCron': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def saveCronChanges(self, userID=None, data=None):
         try:
@@ -3517,17 +3422,14 @@ class WebsiteManager:
                             "user": website.externalApp,
                             "cron": finalCron,
                             "line": line}
-                final_json = json.dumps(data_ret)
-                return HttpResponse(final_json)
+                return JsonResponse(data_ret)
             else:
                 dic = {'getWebsiteCron': 0, 'error_message': output}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
         except BaseException as msg:
             dic = {'getWebsiteCron': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def remCronbyLine(self, userID=None, data=None):
         try:
@@ -3558,18 +3460,15 @@ class WebsiteManager:
                             "user": website.externalApp,
                             "removeLine": output.split(',')[1],
                             "line": line}
-                final_json = json.dumps(data_ret)
-                return HttpResponse(final_json)
+                return JsonResponse(data_ret)
             else:
                 dic = {'remCronbyLine': 0, 'error_message': output}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
 
         except BaseException as msg:
             dic = {'remCronbyLine': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def addNewCron(self, userID=None, data=None):
         try:
@@ -3624,18 +3523,15 @@ class WebsiteManager:
                 data_ret = {"addNewCron": 1,
                             "user": website.externalApp,
                             "cron": finalCron}
-                final_json = json.dumps(data_ret)
-                return HttpResponse(final_json)
+                return JsonResponse(data_ret)
             else:
                 dic = {'addNewCron': 0, 'error_message': output}
-                json_data = json.dumps(dic)
-                return HttpResponse(json_data)
+                return JsonResponse(dic)
 
 
         except BaseException as msg:
             dic = {'addNewCron': 0, 'error_message': str(msg)}
-            json_data = json.dumps(dic)
-            return HttpResponse(json_data)
+            return JsonResponse(dic)
 
     def submitAliasCreation(self, userID=None, data=None):
         try:
@@ -3649,8 +3545,7 @@ class WebsiteManager:
 
             if not validators.domain(aliasDomain):
                 data_ret = {'status': 0, 'createAliasStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if ACLManager.checkOwnership(self.domain, admin, currentACL) == 1:
                 pass
@@ -3672,21 +3567,18 @@ class WebsiteManager:
                 pass
             else:
                 data_ret = {'createAliasStatus': 0, 'error_message': output, "existsStatus": 0}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             ## Create Configurations ends here
 
             data_ret = {'createAliasStatus': 1, 'error_message': "None", "existsStatus": 0}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
 
         except BaseException as msg:
             data_ret = {'createAliasStatus': 0, 'error_message': str(msg), "existsStatus": 0}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def issueAliasSSL(self, userID=None, data=None):
         try:
@@ -3718,17 +3610,14 @@ class WebsiteManager:
 
             if output.find("1,None") > -1:
                 data_ret = {'sslStatus': 1, 'error_message': "None", "existsStatus": 0}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'sslStatus': 0, 'error_message': output, "existsStatus": 0}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'sslStatus': 0, 'error_message': str(msg), "existsStatus": 0}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def delateAlias(self, userID=None, data=None):
         try:
@@ -3757,18 +3646,15 @@ class WebsiteManager:
 
             if output.find("1,None") > -1:
                 data_ret = {'deleteAlias': 1, 'error_message': "None", "existsStatus": 0}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'deleteAlias': 0, 'error_message': output, "existsStatus": 0}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'deleteAlias': 0, 'error_message': str(msg), "existsStatus": 0}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def changeOpenBasedir(self, userID=None, data=None):
         try:
@@ -3788,13 +3674,11 @@ class WebsiteManager:
             output = ProcessUtilities.popenExecutioner(execPath)
 
             data_ret = {'status': 1, 'changeOpenBasedir': 1, 'error_message': "None"}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'changeOpenBasedir': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def wordpressInstall(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -3843,13 +3727,11 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def installWordpressStatus(self, userID=None, data=None):
         try:
@@ -3860,8 +3742,7 @@ class WebsiteManager:
             else:
                 data_ret = {'abort': 1, 'installStatus': 0, 'installationProgress': "100",
                             'currentStatus': 'Invalid status file.'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             statusData = ProcessUtilities.outputExecutioner("cat " + statusFile).splitlines()
 
@@ -3872,13 +3753,11 @@ class WebsiteManager:
                 subprocess.call(shlex.split(command))
                 data_ret = {'abort': 1, 'installStatus': 1, 'installationProgress': "100",
                             'currentStatus': 'Successfully Installed.'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             elif lastLine.find('[404]') > -1:
                 data_ret = {'abort': 1, 'installStatus': 0, 'installationProgress': "0",
                             'error_message': ProcessUtilities.outputExecutioner("cat " + statusFile).splitlines()}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 progress = lastLine.split(',')
                 currentStatus = progress[0]
@@ -3888,13 +3767,11 @@ class WebsiteManager:
                     installationProgress = 0
                 data_ret = {'abort': 0, 'installStatus': 0, 'installationProgress': installationProgress,
                             'currentStatus': currentStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'abort': 0, 'installStatus': 0, 'installationProgress': "0", 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def joomlaInstall(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -3942,15 +3819,13 @@ class WebsiteManager:
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
             ## Installation ends
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def setupGit(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4037,14 +3912,12 @@ StrictHostKeyChecking no
 
             data_ret = {'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def gitNotify(self, userID=None, data=None):
         try:
@@ -4056,13 +3929,11 @@ StrictHostKeyChecking no
             background.start()
 
             data_ret = {'pulled': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'pulled': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def detachRepo(self, userID=None, data=None):
         try:
@@ -4088,14 +3959,12 @@ StrictHostKeyChecking no
             time.sleep(2)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def changeBranch(self, userID=None, data=None):
         try:
@@ -4122,14 +3991,12 @@ StrictHostKeyChecking no
             time.sleep(2)
 
             data_ret = {'status': 1, 'error_message': 'None'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def installPrestaShop(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4192,15 +4059,13 @@ StrictHostKeyChecking no
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
             ## Installation ends
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def installMautic(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4257,15 +4122,13 @@ StrictHostKeyChecking no
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
             ## Installation ends
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def prestaShopInstall(self, userID=None, data=None):
         try:
@@ -4304,15 +4167,13 @@ StrictHostKeyChecking no
 
             data_ret = {'status': 1, 'installStatus': 1, 'error_message': 'None',
                         'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
             ## Installation ends
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def createWebsiteAPI(self, data=None):
         try:
@@ -4358,15 +4219,13 @@ StrictHostKeyChecking no
             else:
                 data_ret = {"existsStatus": 0, 'createWebSiteStatus': 0,
                             'error_message': "Could not authorize access to API"}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             return self.submitWebsiteCreation(admin.pk, data)
 
         except BaseException as msg:
             data_ret = {'createWebSiteStatus': 0, 'error_message': str(msg), "existsStatus": 0}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def searchWebsitesJson(self, currentlACL, userID, searchTerm):
 
@@ -4483,8 +4342,7 @@ StrictHostKeyChecking no
                 else:
                     data['server'] = 0
 
-                json_data = json.dumps(data)
-                return HttpResponse(json_data)
+                return JsonResponse(data)
             except:
                 pass
 
@@ -4528,13 +4386,11 @@ StrictHostKeyChecking no
                 data['status'] = 1
                 data['server'] = WebsiteManager.lsws
 
-            json_data = json.dumps(data)
-            return HttpResponse(json_data)
+            return JsonResponse(data)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'saveStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def switchServer(self, userID=None, data=None):
 
@@ -4559,8 +4415,7 @@ StrictHostKeyChecking no
         time.sleep(3)
 
         data_ret = {'status': 1, 'tempStatusPath': tempStatusPath}
-        json_data = json.dumps(data_ret)
-        return HttpResponse(json_data)
+        return JsonResponse(data_ret)
 
     def tuneSettings(self, userID=None, data=None):
         try:
@@ -4582,14 +4437,12 @@ StrictHostKeyChecking no
             if int(pmStartServers) < int(pmMinSpareServers) or int(pmStartServers) > int(pmMinSpareServers):
                 data_ret = {'status': 0,
                             'error_message': 'pm.start_servers must not be less than pm.min_spare_servers and not greater than pm.max_spare_servers.'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if int(pmMinSpareServers) > int(pmMaxSpareServers):
                 data_ret = {'status': 0,
                             'error_message': 'pm.max_spare_servers must not be less than pm.min_spare_servers'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             try:
                 website = Websites.objects.get(domain=domainName)
@@ -4657,12 +4510,10 @@ StrictHostKeyChecking no
             ProcessUtilities.normalExecutioner(command)
 
             data_ret = {'status': 1}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0,  'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def sshAccess(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4710,13 +4561,11 @@ StrictHostKeyChecking no
             ProcessUtilities.executioner(command)
 
             data_ret = {'status': 1, 'error_message': 'None', 'LinuxUser': website.externalApp}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def setupStaging(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4744,13 +4593,11 @@ StrictHostKeyChecking no
 
             if not validators.domain(self.domain):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if not validators.domain(data['domainName']):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             if ACLManager.checkOwnership(self.domain, admin, currentACL) == 1:
                 pass
@@ -4774,13 +4621,11 @@ StrictHostKeyChecking no
             st.start()
 
             data_ret = {'status': 1, 'error_message': 'None', 'tempStatusPath': tempStatusPath}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def syncToMaster(self, request=None, userID=None, data=None, childDomain=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -4806,8 +4651,7 @@ StrictHostKeyChecking no
 
             if not validators.domain(data['childDomain']):
                 data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': "Invalid domain."}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             self.domain = data['childDomain']
 
@@ -4845,13 +4689,11 @@ StrictHostKeyChecking no
             st.start()
 
             data_ret = {'status': 1, 'error_message': 'None', 'tempStatusPath': tempStatusPath}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def convertDomainToSite(self, userID=None, request=None):
         try:
@@ -4863,13 +4705,11 @@ StrictHostKeyChecking no
             background.start()
 
             data_ret = {'status': 1, 'createWebSiteStatus': 1, 'tempStatusPath': extraArgs['tempStatusPath']}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'createWebSiteStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def manageGIT(self, request=None, userID=None, data=None):
         currentACL = ACLManager.loadedACL(userID)
@@ -5087,8 +4927,7 @@ StrictHostKeyChecking no
                     deploymentKey = ProcessUtilities.outputExecutioner(command, self.externalAppLocal)
 
                 data_ret = {'status': 1, 'repo': 0, 'deploymentKey': deploymentKey, 'home': self.home}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
 
                 ## Find git branches
@@ -5139,13 +4978,11 @@ StrictHostKeyChecking no
                             'autoPushCurrent': self.autoPushCurrent, 'emailLogsCurrent': self.emailLogsCurrent,
                             'commands': self.commands, "webhookCommandCurrent": self.webhookCommandCurrent}
 
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def initRepo(self, userID=None, data=None):
         try:
@@ -5188,17 +5025,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': result}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def setupRemote(self, userID=None, data=None):
         try:
@@ -5282,17 +5116,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': possibleError}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'installStatus': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def changeGitBranch(self, userID=None, data=None):
         try:
@@ -5324,8 +5155,7 @@ StrictHostKeyChecking no
             if self.branchName.find('*') > -1:
                 data_ret = {'status': 0, 'commandStatus': 'Already on this branch.',
                             'error_message': 'Already on this branch.'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             self.externalApp = ACLManager.FetchExternalApp(self.domain)
 
@@ -5342,17 +5172,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus + 'Refreshing page in 3 seconds..'}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': 'Failed to change branch', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def createNewBranch(self, userID=None, data=None):
         try:
@@ -5398,17 +5225,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': 'Failed to create branch', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def commitChanges(self, userID=None, data=None):
         try:
@@ -5486,17 +5310,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': 'Nothing to commit.', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg), 'commandStatus': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def gitPull(self, userID=None, data=None):
         try:
@@ -5540,17 +5361,14 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': 'Pull not required.', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def gitPush(self, userID=None, data=None):
         try:
@@ -5591,8 +5409,7 @@ StrictHostKeyChecking no
                 if currentBranch.find('fatal: ambiguous argument') > -1:
                     data_ret = {'status': 0, 'error_message': 'You need to commit first.',
                                 'commandStatus': 'You need to commit first.'}
-                    json_data = json.dumps(data_ret)
-                    return HttpResponse(json_data)
+                    return JsonResponse(data_ret)
 
                 command = 'git -C %s push --set-upstream origin %s' % (self.folder, currentBranch)
                 commandStatus = ProcessUtilities.outputExecutioner(command, self.externalApp, False)
@@ -5600,17 +5417,14 @@ StrictHostKeyChecking no
             if commandStatus.find('Everything up-to-date') == -1 and commandStatus.find(
                     'rejected') == -1 and commandStatus.find('Permission denied') == -1:
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 data_ret = {'status': 0, 'error_message': 'Push failed.', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg), 'commandStatus': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def attachRepoGIT(self, userID=None, data=None):
         try:
@@ -5694,8 +5508,7 @@ StrictHostKeyChecking no
                 ProcessUtilities.executioner(command, self.externalApp)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
             else:
 
@@ -5705,13 +5518,11 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 0, 'error_message': 'Failed to clone.', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def removeTracking(self, userID=None, data=None):
         try:
@@ -5752,13 +5563,11 @@ StrictHostKeyChecking no
             # fm.fixPermissions(self.masterDomain)
 
             data_ret = {'status': 1}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchGitignore(self, userID=None, data=None):
         try:
@@ -5786,13 +5595,11 @@ StrictHostKeyChecking no
                 gitIgnoreContent = 'File is currently empty.'
 
             data_ret = {'status': 1, 'gitIgnoreContent': gitIgnoreContent}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def saveGitIgnore(self, userID=None, data=None):
         try:
@@ -5837,13 +5644,11 @@ StrictHostKeyChecking no
             # fm.fixPermissions(self.masterDomain)
 
             data_ret = {'status': 1}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchCommits(self, userID=None, data=None):
         try:
@@ -5890,18 +5695,15 @@ StrictHostKeyChecking no
             commits = json_data + ']'
 
             data_ret = {'status': 1, 'commits': commits}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except IndexError:
             data_ret = {'status': 0, 'error_message': 'No commits found.'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchFiles(self, userID=None, data=None):
         try:
@@ -5944,13 +5746,11 @@ StrictHostKeyChecking no
                     FinalFiles.append(items.rstrip('\n').lstrip('\n'))
 
             data_ret = {'status': 1, 'files': FinalFiles}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def fetchChangesInFile(self, userID=None, data=None):
         try:
@@ -6032,16 +5832,13 @@ StrictHostKeyChecking no
                         lineNumber = lineNumber + 1
 
             data_ret = {'status': 1, 'fileChangedContent': finalConent}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except IndexError:
             data_ret = {'status': 0, 'error_message': 'Not a text file.'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def saveGitConfigurations(self, userID=None, data=None):
         try:
@@ -6108,13 +5905,11 @@ StrictHostKeyChecking no
             writeToFile.close()
 
             data_ret = {'status': 1}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def getLogsInJson(self, logs):
         json_data = "["
@@ -6164,16 +5959,13 @@ StrictHostKeyChecking no
             jsonData = self.getLogsInJson(logs[finalPageNumber:endPageNumber])
 
             data_ret = {'status': 1, 'logs': jsonData, 'pagination': pagination}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except IndexError:
             data_ret = {'status': 0, 'error_message': 'Not a text file.'}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def webhook(self, domain, data=None):
         try:
@@ -6268,19 +6060,16 @@ StrictHostKeyChecking no
                 # fm.fixPermissions(self.masterDomain)
 
                 data_ret = {'status': 1, 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
             else:
                 message = '[Webhook Fired] Status: %s.' % (commandStatus)
                 GitLogs(owner=self.web, type='ERROR', message=message).save()
                 data_ret = {'status': 0, 'error_message': 'Pull not required.', 'commandStatus': commandStatus}
-                json_data = json.dumps(data_ret)
-                return HttpResponse(json_data)
+                return JsonResponse(data_ret)
 
         except BaseException as msg:
             data_ret = {'status': 0, 'error_message': str(msg)}
-            json_data = json.dumps(data_ret)
-            return HttpResponse(json_data)
+            return JsonResponse(data_ret)
 
     def getSSHConfigs(self, userID=None, data=None):
         try:
@@ -6330,13 +6119,12 @@ StrictHostKeyChecking no
 
             json_data = json_data + ']'
 
-            final_json = json.dumps({'status': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_dic = {'status': 1, 'error_message': "None", "data": json_data}
+            return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def deleteSSHKey(self, userID=None, data=None):
         try:
@@ -6361,17 +6149,14 @@ StrictHostKeyChecking no
 
             if output.find("1,None") > -1:
                 final_dic = {'status': 1, 'delete_status': 1}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
             else:
                 final_dic = {'status': 1, 'delete_status': 1, "error_mssage": output}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'delete_status': 0, 'error_mssage': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def addSSHKey(self, userID=None, data=None):
         try:
@@ -6408,17 +6193,14 @@ StrictHostKeyChecking no
 
             if output.find("1,None") > -1:
                 final_dic = {'status': 1, 'add_status': 1}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
             else:
                 final_dic = {'status': 0, 'add_status': 0, "error_mssage": output}
-                final_json = json.dumps(final_dic)
-                return HttpResponse(final_json)
+                return JsonResponse(final_dic)
 
         except BaseException as msg:
             final_dic = {'status': 0, 'add_status': 0, 'error_mssage': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
 
     def ApacheManager(self, request=None, userID=None, data=None):
@@ -6473,9 +6255,7 @@ StrictHostKeyChecking no
 
         if output.find("1,None") > -1:
             status = {"status": 1}
-            final_json = json.dumps(status)
-            return HttpResponse(final_json)
+            return JsonResponse(status)
         else:
             final_dic = {'status': 0, 'error_message': output}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)

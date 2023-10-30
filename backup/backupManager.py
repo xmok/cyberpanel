@@ -17,6 +17,7 @@ from plogical.virtualHostUtilities import virtualHostUtilities
 import subprocess
 import shlex
 from django.shortcuts import HttpResponse, render
+from django.http import JsonResponse
 from loginSystem.models import Administrator
 from plogical.mailUtilities import mailUtilities
 from random import randint
@@ -482,12 +483,11 @@ class BackupManager:
                     json_data = json_data + ',' + json.dumps(dic)
 
             json_data = json_data + ']'
-            final_json = json.dumps({'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data})
-            return HttpResponse(final_json)
+            final_json = {'status': 1, 'fetchStatus': 1, 'error_message': "None", "data": json_data}
+            return JsonResponse(final_json)
         except BaseException as msg:
             final_dic = {'status': 0, 'fetchStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def submitBackupCreation(self, userID=None, data=None):
         try:
@@ -518,15 +518,13 @@ class BackupManager:
 
             time.sleep(2)
 
-            final_json = json.dumps(
-                {'status': 1, 'metaStatus': 1, 'error_message': "None", 'tempStorage': tempStoragePath})
-            return HttpResponse(final_json)
+            final_json = {'status': 1, 'metaStatus': 1, 'error_message': "None", 'tempStorage': tempStoragePath}
+            return JsonResponse(final_json)
 
         except BaseException as msg:
             logging.CyberCPLogFileWriter.writeToFile(str(msg))
             final_dic = {'status': 0, 'metaStatus': 0, 'error_message': str(msg)}
-            final_json = json.dumps(final_dic)
-            return HttpResponse(final_json)
+            return JsonResponse(final_dic)
 
     def backupStatus(self, userID=None, data=None):
         try:
@@ -544,8 +542,8 @@ class BackupManager:
                 command = "sudo cat " + backupFileNamePath
                 fileName = ProcessUtilities.outputExecutioner(command, domain.externalApp)
                 if fileName.find('No such file or directory') > -1:
-                    final_json = json.dumps({'backupStatus': 0, 'error_message': "None", "status": 0, "abort": 0})
-                    return HttpResponse(final_json)
+                    final_json = {'backupStatus': 0, 'error_message': "None", "status": 0, "abort": 0}
+                    return JsonResponse(final_json)
             except:
                 fileName = "Fetching.."
 
